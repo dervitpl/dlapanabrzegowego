@@ -1,3 +1,4 @@
+
 <div *ngFor="let project of projects">
   <h2>{{ project.name }}</h2>
   <p>{{ project.description }}</p>
@@ -10,6 +11,7 @@
 </div>
 
 <div *ngIf="editingProjectID">
+  <h2>Edytujesz projekt {{ editingProject.name}} </h2>
   <input [(ngModel)]="editingProject.name" placeholder="Project Name" />
   <textarea [(ngModel)]="editingProject.description" placeholder="Description"></textarea>
   <button (click)="saveEdit()">Save</button>
@@ -17,12 +19,13 @@
 </div>
 
 <h2>Add New Project</h2>
+<p>
 <input [(ngModel)]="newProject.name" placeholder="Project Name" />
 <textarea [(ngModel)]="newProject.description" placeholder="Description"></textarea>
 <button (click)="addProject()">Add Project</button>
-
+</p>
 <!-- zardzadzanie funkcjonalnosciami i zadaniami -->
-<div *ngIf="selectedProject">
+<div class="functionalities-tasks-column" *ngIf="selectedProject">
   <h2>Functionalities for {{ selectedProject.name }}</h2>
   
   <!-- wyświetlanie funkcjonalnosci -->
