@@ -6,5 +6,5 @@ export interface Functionality {
   description: string;
   tasks: Task[];
   projectId: number;
- 
+  status?: string;
 }

@@ -8,6 +8,7 @@ import { ProjectService } from '../../services/project.service';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
+  statusHierarchy: string[] = ['InProgress', 'ToDo', 'Done'];
   projects: Project[] = [];
   editingProjectID: number | null = null;
   editingProject: Project = {
@@ -23,7 +24,7 @@ export class ProjectsComponent implements OnInit {
   };
   
   selectedProject: Project | null = null;
-  newFunctionality: Functionality = { id: 0, name: '', description: '', tasks: [] };
+  newFunctionality: Functionality = { id: 0, name: '', description: '', tasks: [], status: 'ToDo' };
   newTask: Task = { id: 0, name: '', description: '', status: 'ToDo' };
 
   editingFunctionality: Functionality | null = null;
@@ -84,7 +85,7 @@ export class ProjectsComponent implements OnInit {
     if (this.newFunctionality.name.trim() && this.selectedProject) {
       this.newFunctionality.id = Date.now();
       this.selectedProject.functionalities.push({ ...this.newFunctionality });
-      this.newFunctionality = { id: 0, name: '', description: '', tasks: [] };
+      this.newFunctionality = { id: 0, name: '', description: '', tasks: [] , status: 'ToDo'};
     }
   }
 
@@ -94,6 +95,10 @@ export class ProjectsComponent implements OnInit {
       const targetFunctionality = this.selectedProject.functionalities.find(f => f.id === functionalityId);
       if (targetFunctionality) {
         targetFunctionality.tasks.push({ ...this.newTask });
+        
+        // aktualizacja statusu funkcjonalności po dodaniu nowego zadania
+        this.updateFunctionalityStatus(targetFunctionality);
+  
         this.newTask = { id: 0, name: '', description: '', status: 'ToDo' };
       }
     }
@@ -115,6 +120,9 @@ export class ProjectsComponent implements OnInit {
         const taskIndex = functionality.tasks.findIndex(t => t.id === taskId);
         if (taskIndex !== -1) {
           functionality.tasks.splice(taskIndex, 1);
+          
+          // aktualizacja statusu funkcjonalnosci po usunięciu zadania
+          this.updateFunctionalityStatus(functionality);
         }
       }
     }
@@ -131,7 +139,7 @@ export class ProjectsComponent implements OnInit {
 
   cancelEditingFunctionality() {
     if (this.editingFunctionality && this.selectedProject) {
-        const index = this.selectedProject.functionalities.findIndex(f => f.id === this.editingFunctionality?.id);  // Dodanie "?."
+        const index = this.selectedProject.functionalities.findIndex(f => f.id === this.editingFunctionality?.id); 
 
         if (index > -1) {  
             this.selectedProject.functionalities[index] = this.editingFunctionalityBackup;
@@ -141,14 +149,43 @@ export class ProjectsComponent implements OnInit {
     }
 }
 
+updateFunctionalityStatus(functionality: Functionality): void {
+  if (!functionality.tasks || functionality.tasks.length === 0) {
+      return;
+  }
+
+  let highestPriorityStatus = this.statusHierarchy[this.statusHierarchy.length - 1];
+
+  for (let task of functionality.tasks) {
+      const taskStatusPriority = this.statusHierarchy.indexOf(task.status);
+      const highestStatusPriority = this.statusHierarchy.indexOf(highestPriorityStatus);
+
+      if (taskStatusPriority < highestStatusPriority) {
+          highestPriorityStatus = task.status;
+      }
+  }
+
+  functionality.status = highestPriorityStatus;
+}
+
   startEditingTask(task: Task) {
     this.editingTask = task;
     this.editingTaskBackup = { ...task };
   }
 
   saveEditedTask() {
-    this.editingTask = null;
-  }
+    if (this.editingTask && this.selectedProject) {
+        for (const functionality of this.selectedProject.functionalities) {
+            const index = functionality.tasks.findIndex(t => t.id === this.editingTask?.id);
+            if (index !== -1) {
+                functionality.tasks[index] = this.editingTaskBackup;
+                this.updateFunctionalityStatus(functionality);  // aktualizacja statusu funkcjonalności
+                this.editingTask = null;
+                break;
+            }
+        }
+    }
+}
 
   cancelEditingTask() {
     if (this.editingTask && this.selectedProject) {

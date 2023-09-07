@@ -10,6 +10,7 @@ export interface Functionality {
   name: string;
   description: string;
   tasks: Task[];
+  status?: string;
 }
 
 export interface Project {

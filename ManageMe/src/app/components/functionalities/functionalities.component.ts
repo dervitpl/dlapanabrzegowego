@@ -35,7 +35,8 @@ export class FunctionalitiesComponent implements OnInit {
     projectId: 0,
     name: '',
     description: '',
-    tasks: []
+    tasks: [],
+    status: 'ToDo'
   };
   
   
