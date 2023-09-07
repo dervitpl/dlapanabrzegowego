@@ -23,7 +23,7 @@ export class ProjectsComponent implements OnInit {
   
   addProject(): void {
     if (this.newProject.name.trim()) {
-      this.newProject.id = Date.now(); // Dajemy unikatowe ID na podstawie aktualnego czasu.
+      this.newProject.id = Date.now(); 
       this.projectService.addProject({ ...this.newProject });
       this.newProject.name = '';
       this.newProject.description = '';
