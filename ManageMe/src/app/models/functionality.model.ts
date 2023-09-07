@@ -1,8 +1,10 @@
+import { Task } from "./project.model";
+
 export interface Functionality {
-    id: number;
-    projectId: number;
-    name: string;
-    description: string;
-    status: 'notStarted' | 'inProgress' | 'completed';
-  }
-  
+  id: number;
+  name: string;
+  description: string;
+  tasks: Task[];
+  projectId: number;
+ 
+}

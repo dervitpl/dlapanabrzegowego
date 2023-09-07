@@ -35,7 +35,7 @@ export class FunctionalitiesComponent implements OnInit {
     projectId: 0,
     name: '',
     description: '',
-    status: 'notStarted'
+    tasks: []
   };
   
   

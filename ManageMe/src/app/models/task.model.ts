@@ -1,7 +1,7 @@
 export interface Task {
-    id: number;
-    functionalityId: number;
-    name: string;
-    status: 'todo' | 'doing' | 'done';
-  }
-  
+  id: number;
+  name: string;
+  description: string;
+  status: 'ToDo' | 'InProgress' | 'Done';
+  functionalityId: number;
+}

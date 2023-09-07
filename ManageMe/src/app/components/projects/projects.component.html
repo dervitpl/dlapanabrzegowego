@@ -1,20 +1,80 @@
 <div *ngFor="let project of projects">
-  <div *ngIf="editingProjectID !== project.id">
-    <h3>{{ project.name }}</h3>
-    <p>{{ project.description }}</p>
-    <button (click)="startEditing(project)">Edit</button>
-    <button (click)="deleteProject(project.id)">Delete</button>
-  </div>
+  <h2>{{ project.name }}</h2>
+  <p>{{ project.description }}</p>
+  <p>Owner: {{ project.owner }}</p>
+  
+  <!-- Funkcje edycji i usuwania projektu -->
+  <button (click)="startEditing(project)">Edit</button>
+  <button (click)="deleteProject(project.id)">Delete</button>
+  <button (click)="selectProject(project)">Manage Functionalities & Tasks</button>
+</div>
 
-  <div *ngIf="editingProjectID === project.id">
-    <input [(ngModel)]="editingProject.name" placeholder="Project Name" />
-    <textarea [(ngModel)]="editingProject.description" placeholder="Description"></textarea>
-    <button (click)="saveEdit()">Save</button>
-    <button (click)="cancelEdit()">Cancel</button>
-  </div>
+<div *ngIf="editingProjectID">
+  <input [(ngModel)]="editingProject.name" placeholder="Project Name" />
+  <textarea [(ngModel)]="editingProject.description" placeholder="Description"></textarea>
+  <button (click)="saveEdit()">Save</button>
+  <button (click)="cancelEdit()">Cancel</button>
 </div>
 
 <h2>Add New Project</h2>
 <input [(ngModel)]="newProject.name" placeholder="Project Name" />
 <textarea [(ngModel)]="newProject.description" placeholder="Description"></textarea>
 <button (click)="addProject()">Add Project</button>
+
+<!-- Zarządzanie funkcjonalnościami i zadaniami -->
+<div *ngIf="selectedProject">
+  <h2>Functionalities for {{ selectedProject.name }}</h2>
+  
+  <!-- Wyświetlanie funkcjonalności -->
+  <div *ngFor="let functionality of selectedProject?.functionalities">
+    <ng-container *ngIf="editingFunctionality !== functionality">
+      {{ functionality.name }} - {{ functionality.description }}
+      <button (click)="startEditingFunctionality(functionality)">Edytuj</button>
+      <button (click)="deleteFunctionality(functionality.id)">Usuń funkcjonalność</button>
+    </ng-container>
+
+    <!-- Edycja funkcjonalności -->
+    <div *ngIf="editingFunctionality === functionality">
+      <input [(ngModel)]="functionality.name" placeholder="Nazwa funkcjonalności">
+      <input [(ngModel)]="functionality.description" placeholder="Opis funkcjonalności">
+      <button (click)="saveEditedFunctionality()">Zapisz</button>
+      <button (click)="cancelEditingFunctionality()">Anuluj</button>
+    </div>
+
+    <!-- Zadania dla funkcjonalności -->
+    <div *ngFor="let task of functionality.tasks">
+      <ng-container *ngIf="editingTask !== task">
+        {{ task.name }} - {{ task.description }} - Status: {{ task.status }}
+        <button (click)="startEditingTask(task)">Edytuj</button>
+        <button (click)="deleteTask(functionality.id, task.id)">Usuń zadanie</button>
+      </ng-container>
+
+      <!-- Edycja zadania -->
+      <div *ngIf="editingTask === task">
+        <input [(ngModel)]="task.name" placeholder="Nazwa zadania">
+        <input [(ngModel)]="task.description" placeholder="Opis zadania">
+        <button (click)="saveEditedTask()">Zapisz</button>
+        <button (click)="cancelEditingTask()">Anuluj</button>
+      </div>
+    </div>
+
+    <!-- Formularz dodawania zadania -->
+    <div>
+      <input [(ngModel)]="newTask.name" placeholder="Task Name">
+      <textarea [(ngModel)]="newTask.description" placeholder="Task Description"></textarea>
+      <select [(ngModel)]="newTask.status">
+        <option value="ToDo">ToDo</option>
+        <option value="InProgress">In Progress</option>
+        <option value="Done">Done</option>
+      </select>
+      <button (click)="addTaskToFunctionality(functionality.id)">Add Task</button>
+    </div>
+  </div>
+
+  <!-- Formularz dodawania funkcjonalności -->
+  <div>
+    <input [(ngModel)]="newFunctionality.name" placeholder="Functionality Name">
+    <textarea [(ngModel)]="newFunctionality.description" placeholder="Functionality Description"></textarea>
+    <button (click)="addFunctionalityToProject()">Add Functionality</button>
+  </div>
+</div>

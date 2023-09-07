@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Project } from '../models/project.model';
+import { Functionality, Project, Task } from '../models/project.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +8,10 @@ export class ProjectService {
   private projects: Project[] = [
     {
       id: 1,
-      name: 'Default Project',
-      description: 'This is a default project',
-      owner: 'Jan Kowalski'
+  name: 'Domyslny Projekt',
+  description: 'Opis',
+  owner: 'Jan Kowalski',
+  functionalities: []
     }
   ];
 
@@ -39,6 +40,44 @@ export class ProjectService {
     const index = this.projects.findIndex(p => p.id === updatedProject.id);
     if (index !== -1) {
       this.projects[index] = updatedProject;
+    }
+  }
+  addFunctionality(projectId: number, functionality: Functionality): void {
+    const project = this.projects.find(p => p.id === projectId);
+    if (project) {
+      project.functionalities.push(functionality);
+    }
+  }
+  removeFunctionality(projectId: number, functionalityId: number): void {
+    const project = this.projects.find(p => p.id === projectId);
+    if (project) {
+      const index = project.functionalities.findIndex(f => f.id === functionalityId);
+      if (index > -1) {
+        project.functionalities.splice(index, 1);
+      }
+    }
+  }
+
+  addTask(projectId: number, functionalityId: number, task: Task): void {
+    const project = this.projects.find(p => p.id === projectId);
+    if (project) {
+      const functionality = project.functionalities.find(f => f.id === functionalityId);
+      if (functionality) {
+        functionality.tasks.push(task);
+      }
+    }
+  }
+
+  removeTask(projectId: number, functionalityId: number, taskId: number): void {
+    const project = this.projects.find(p => p.id === projectId);
+    if (project) {
+      const functionality = project.functionalities.find(f => f.id === functionalityId);
+      if (functionality) {
+        const index = functionality.tasks.findIndex(t => t.id === taskId);
+        if (index > -1) {
+          functionality.tasks.splice(index, 1);
+        }
+      }
     }
   }
 }

@@ -34,7 +34,8 @@ export class TasksComponent implements OnInit {
     id: 0,
     functionalityId: this.functionalityId!,
     name: '',
-    status: 'todo'
+    status: 'ToDo',
+    description: ''
   };
   
   addTask(): void {
@@ -51,7 +52,7 @@ export class TasksComponent implements OnInit {
     this.loadTasksForFunctionality(this.functionalityId!);
   }
   
-  changeStatus(task: Task, newStatus: 'todo' | 'doing' | 'done'): void {
+  changeStatus(task: Task, newStatus: 'ToDo' | 'InProgress' | 'Done'): void {
     task.status = newStatus;
     this.taskService.updateTask(task);
   }
