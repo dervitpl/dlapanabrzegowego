@@ -1,0 +1,13 @@
+<h2>Functionalities for Project {{ projectId }}</h2>
+<ul>
+  <li *ngFor="let functionality of functionalities">
+    {{ functionality.name }}
+  </li>
+</ul>
+<h3>Add New Functionality</h3>
+<input [(ngModel)]="newFunctionality.name" placeholder="Functionality Name" />
+<button (click)="addFunctionality()">Add Functionality</button>
+<li *ngFor="let functionality of functionalities">
+    {{ functionality.name }} <button (click)="deleteFunctionality(functionality.id)">Delete</button>
+  </li>
+  
