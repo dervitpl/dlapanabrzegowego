@@ -1,15 +1,25 @@
-<h2>Projects</h2>
-<ul>
-  <li *ngFor="let project of projects">
-    {{ project.name }}
-  </li>
-</ul>
-<h3>Add New Project</h3>
-<input [(ngModel)]="newProject.name" placeholder="Project Name" />
-<textarea [(ngModel)]="newProject.description" placeholder="Description"></textarea>
-<button (click)="addProject()">Add Project</button>
-<li *ngFor="let project of projects">
-    {{ project.name }} <button (click)="deleteProject(project.id)">Delete</button>
-  </li>
-  
+<div class="add-project">
+  <h3>Add New Project</h3>
+  <input [(ngModel)]="newProject.name" placeholder="Project Name" />
+  <textarea [(ngModel)]="newProject.description" placeholder="Description"></textarea>
+  <button (click)="addProject()">Add</button>
+</div>
 
+<div *ngIf="projects.length > 0">
+  <h3>Projects</h3>
+  <ul>
+    <li *ngFor="let project of projects">
+      {{ project.name }} ({{ project.description }})
+      <button (click)="deleteProject(project)">Delete</button>
+      <button (click)="editProject(project)">Edit</button>
+
+      <div *ngIf="isEditing">
+        <input [(ngModel)]="editingProject.name" placeholder="Project Name" />
+        <textarea [(ngModel)]="editingProject.description" placeholder="Description"></textarea>
+        <button (click)="saveProject()">Save</button>
+        <button (click)="isEditing = false">Cancel</button>
+    </div>
+    
+    </li>
+  </ul>
+</div>
