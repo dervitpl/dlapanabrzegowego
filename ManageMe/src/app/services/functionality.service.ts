@@ -11,7 +11,8 @@ export class FunctionalityService {
       projectId: 1,
       name: 'Default Functionality',
       description: 'This is a default functionality',
-      tasks: []
+      tasks: [],
+    
     }
   ];
 

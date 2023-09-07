@@ -36,7 +36,7 @@ export class FunctionalitiesComponent implements OnInit {
     name: '',
     description: '',
     tasks: [],
-    status: 'ToDo'
+    
   };
   
   
