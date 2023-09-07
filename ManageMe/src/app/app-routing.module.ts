@@ -8,7 +8,16 @@ const routes: Routes = [
   { path: '', redirectTo: '/projects', pathMatch: 'full' },
   { path: 'projects', component: ProjectsComponent },
   { path: 'projects/:projectId/functionalities', component: FunctionalitiesComponent },
-  { path: 'functionalities/:functionalityId/tasks', component: TasksComponent }
+  { path: 'functionalities/:functionalityId/tasks', component: TasksComponent },
+  {
+    path: 'functionalities/:projectId',
+    component: FunctionalitiesComponent
+  },
+  {
+    path: 'tasks/:projectId',
+    component: TasksComponent
+  }
+  
 ];
 
 @NgModule({
